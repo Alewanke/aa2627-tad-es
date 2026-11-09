@@ -21,9 +21,9 @@
 // Fonte: https://michaelbach.de/ot/mot-eyeJitter/
 // Regola: lo sfondo è un pattern di piccoli quadrati neri disposti come un
 // codice QR; sopra, un rettangolo grande quanto il canvas con rombi bianchi
-// e neri sfumati. Il rettangolo ruota e si sposta rispetto allo sfondo, e i
-// suoi vuoti lasciano vedere i quadrati. I quadrati scorrono; tenendo premuto
-// il mouse diventano grigi, rilasciandolo tornano neri.
+// e neri sfumati. Il rettangolo resta fermo al centro e ruota su sé stesso,
+// e i suoi vuoti lasciano vedere i quadrati. I quadrati scorrono; tenendo
+// premuto il mouse diventano grigi, rilasciandolo tornano neri.
 // Parametri critici:
 // - latoQuadrato: lato dei quadrati dello sfondo
 // - passoGriglia: distanza fra i quadrati dello sfondo
@@ -31,25 +31,19 @@
 // - sfumatura: quantità di sfocatura dei rombi
 //   effetto più evidente con ..., nessun effetto con ...
 
-let latoQuadrato = 24
-let passoGriglia = 30
+let latoQuadrato = 26
+let passoGriglia = 34
 let latoRombo = 20
-let sfumatura = 6
-let velocita = 0.5
+let sfumatura = 0
 let velocitaRotazione = 0.001
 let velocitaQuadrati = 1
 let grigioQuadrati = 128
 
-let rettangoloX
-let rettangoloY
 let angoloRettangolo = 0
-let mouseAttivo = false
 let spostamentoQuadrati = 0
 
 function setup() {
-    createCanvas(600, 600)
-    rettangoloX = width / 2
-    rettangoloY = height / 2
+    createCanvas(800, 600)
     noStroke()
 }
 
@@ -60,14 +54,7 @@ function draw() {
     // i quadrati scorrono in orizzontale
     spostamentoQuadrati = (spostamentoQuadrati + velocitaQuadrati) % passoGriglia
     disegnaQuadratiSfondo()
-    muoviRettangolo()
     disegnaRettangolo()
-}
-
-// il mouse deve essersi mosso almeno una volta, altrimenti il rettangolo
-// partirebbe verso l'angolo in alto a sinistra
-function mouseMoved() {
-    mouseAttivo = true
 }
 
 function disegnaQuadratiSfondo() {
@@ -83,32 +70,19 @@ function disegnaQuadratiSfondo() {
     }
 }
 
-// il rettangolo si avvicina al cursore
-function muoviRettangolo() {
-    if (!mouseAttivo) {
-        return
-    }
-    let dx = mouseX - rettangoloX
-    let dy = mouseY - rettangoloY
-    let distanza = sqrt(dx * dx + dy * dy)
-    if (distanza > velocita) {
-        rettangoloX = rettangoloX + dx / distanza * velocita
-        rettangoloY = rettangoloY + dy / distanza * velocita
-    }
-}
-
 function disegnaRettangolo() {
     let raggio = sqrt(width * width + height * height) / 2
     let celle = ceil(raggio / latoRombo) + 2
 
     push()
-    translate(rettangoloX, rettangoloY)
+    translate(width / 2, height / 2)
     rotate(angoloRettangolo)
 
-    // il ritaglio rettangolare tiene il pattern dentro il rettangolo
+    // il ritaglio circolare, largo quanto la diagonale del canvas, fa sì che
+    // il pattern dei rombi copra tutto il canvas in ogni rotazione
     drawingContext.save()
     drawingContext.beginPath()
-    drawingContext.rect(-width / 2, -height / 2, width, height)
+    drawingContext.arc(0, 0, raggio, 0, TWO_PI)
     drawingContext.clip()
 
     // la sfocatura è ciò che rende "out of focus" il pattern interno
