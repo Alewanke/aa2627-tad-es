@@ -1,7 +1,19 @@
+// Illusione: Out of Focus, di Akiyoshi Kitaoka
+// Fonte: https://michaelbach.de/ot/mot-eyeJitter/
+// Parametri critici: latoQuadrato = 26, passoGriglia = 34, latoRombo = 20.
+// Effetto più evidente con una griglia regolare; diminuisce quando il pattern
+// diventa troppo scuro o troppo largo.
+//
 // Obiettivo: animare un'illusione ottica geometrica composta da elementi
 // uguali ripetuti, con un movimento che ne conserva l'effetto oppure lo
 // annulla e lo ripristina a intervalli.
-
+//
+// Regola: lo sfondo è un pattern di piccoli quadrati neri disposti come un
+// codice QR; sopra, un rettangolo grande quanto il canvas con rombi bianchi
+// e neri. Il rettangolo resta fermo al centro e ruota su sé stesso,
+// e i suoi vuoti lasciano vedere i quadrati. I quadrati scorrono; tenendo
+// premuto il mouse diventano grigi, rilasciandolo tornano neri.
+//
 // Vincoli:
 // - illusione geometrica in bianco e nero, formata da molti elementi uguali
 //   ripetuti secondo una regola (escluse quelle di due sole figure)
@@ -17,24 +29,9 @@
 // - alla consegna va aggiunta l'anteprima preview.png, con un fotogramma in
 //   cui l'effetto è visibile
 
-// Illusione: Out of Focus, di Akiyoshi Kitaoka
-// Fonte: https://michaelbach.de/ot/mot-eyeJitter/
-// Regola: lo sfondo è un pattern di piccoli quadrati neri disposti come un
-// codice QR; sopra, un rettangolo grande quanto il canvas con rombi bianchi
-// e neri sfumati. Il rettangolo resta fermo al centro e ruota su sé stesso,
-// e i suoi vuoti lasciano vedere i quadrati. I quadrati scorrono; tenendo
-// premuto il mouse diventano grigi, rilasciandolo tornano neri.
-// Parametri critici:
-// - latoQuadrato: lato dei quadrati dello sfondo
-// - passoGriglia: distanza fra i quadrati dello sfondo
-// - latoRombo: lato dei rombi
-// - sfumatura: quantità di sfocatura dei rombi
-//   effetto più evidente con ..., nessun effetto con ...
-
 let latoQuadrato = 26
 let passoGriglia = 34
 let latoRombo = 20
-let sfumatura = 0
 let velocitaRotazione = 0.001
 let velocitaQuadrati = 1
 let grigioQuadrati = 128
@@ -85,8 +82,6 @@ function disegnaRettangolo() {
     drawingContext.arc(0, 0, raggio, 0, TWO_PI)
     drawingContext.clip()
 
-    // la sfocatura è ciò che rende "out of focus" il pattern interno
-    drawingContext.filter = 'blur(' + sfumatura + 'px)'
     disegnaRombi(celle)
 
     drawingContext.restore()
