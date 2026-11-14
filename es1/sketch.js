@@ -1,8 +1,13 @@
 // Illusione: Out of Focus, di Akiyoshi Kitaoka
 // Fonte: https://michaelbach.de/ot/mot-eyeJitter/
-// Parametri critici: latoQuadrato = 26, passoGriglia = 34, latoRombo = 20.
-// Effetto più evidente con una griglia regolare; diminuisce quando il pattern
-// diventa troppo scuro o troppo largo.
+// Parametri critici:
+//   latoQuadrato = 26: effetto più evidente con 26; nessun effetto con 34,
+//     uguale a passoGriglia, perché i quadrati si toccano e lo sfondo diventa
+//     una superficie uniforme
+//   passoGriglia = 34: effetto più evidente con 34; nessun effetto con 100,
+//     perché restano otto colonne e sei righe e il pattern non è più fitto
+//   latoRombo = 20: effetto più evidente con 20; nessun effetto con 60,
+//     perché i rombi coprono i quadrati e il pattern di sfondo scompare
 //
 // Obiettivo: animare un'illusione ottica geometrica composta da elementi
 // uguali ripetuti, con un movimento che ne conserva l'effetto oppure lo
