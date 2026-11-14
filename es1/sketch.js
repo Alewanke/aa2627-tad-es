@@ -37,8 +37,8 @@
 let latoQuadrato = 26
 let passoGriglia = 34
 let latoRombo = 20
-let velocitaRotazione = 0.001
-let velocitaQuadrati = 1
+let velocitaRotazione = 0.06 // radianti al secondo
+let velocitaQuadrati = 60 // pixel al secondo
 let grigioQuadrati = 128
 
 let angoloRettangolo = 0
@@ -52,9 +52,9 @@ function setup() {
 function draw() {
     background(255)
     // il rettangolo ruota continuamente
-    angoloRettangolo = angoloRettangolo + velocitaRotazione
+    angoloRettangolo = angoloRettangolo + velocitaRotazione * deltaTime / 1000
     // i quadrati scorrono in orizzontale
-    spostamentoQuadrati = (spostamentoQuadrati + velocitaQuadrati) % passoGriglia
+    spostamentoQuadrati = (spostamentoQuadrati + velocitaQuadrati * deltaTime / 1000) % passoGriglia
     disegnaQuadratiSfondo()
     disegnaRettangolo()
 }
@@ -82,15 +82,11 @@ function disegnaRettangolo() {
 
     // il ritaglio circolare, largo quanto la diagonale del canvas, fa sì che
     // il pattern dei rombi copra tutto il canvas in ogni rotazione
-    drawingContext.save()
-    drawingContext.beginPath()
-    drawingContext.arc(0, 0, raggio, 0, TWO_PI)
-    drawingContext.clip()
+    
 
     disegnaRombi(celle)
 
-    drawingContext.restore()
-    pop()
+
 }
 
 function disegnaRombi(celle) {
